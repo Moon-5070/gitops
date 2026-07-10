@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: common-echo
+  labels:
+    app: common-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: common-echo
+  template:
+    metadata:
+      labels:
+        app: common-echo
+    spec:
+      containers:
+        - name: http-echo
+          image: hashicorp/http-echo:latest
+          args:
+            - "-text=common app deployed to all clusters by Argo CD ApplicationSet"
+          ports:
+            - containerPort: 5678
