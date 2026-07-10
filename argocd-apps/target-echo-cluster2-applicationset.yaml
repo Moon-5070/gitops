@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: target-echo-cluster2
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            env: target
+  template:
+    metadata:
+      name: "{{.nameNormalized}}-target-echo"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Moon-5070/gitops.git
+        targetRevision: main
+        path: apps/target-echo
+      destination:
+        server: "{{.server}}"
+        namespace: echo-test
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
