@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: common-echo
+  labels:
+    app: common-echo
+spec:
+  type: ClusterIP
+  selector:
+    app: common-echo
+  ports:
+    - port: 80
+      targetPort: 5678
