@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: common-echo-all
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: "{{.nameNormalized}}-common-echo"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Moon-5070/gitops.git
+        targetRevision: main
+        path: apps/common-echo
+      destination:
+        server: "{{.server}}"
+        namespace: common-test
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
